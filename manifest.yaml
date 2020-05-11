@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-in-cluster-config
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: in-cluster-config-serviceaccount
+  namespace: test-in-cluster-config
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: test-in-cluster-config
+  name: list-pods
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: list-pods
+  namespace: test-in-cluster-config
+subjects:
+- kind: ServiceAccount
+  name: in-cluster-config-serviceaccount
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: list-pods
+  apiGroup: ""
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: list-pods
+  namespace: test-in-cluster-config
+spec:
+  containers:
+    - image: zubron/k8s-in-cluster-config:latest
+      imagePullPolicy: IfNotPresent
+      name: list-pods
+      env:
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+  restartPolicy: Never
+  serviceAccountName: in-cluster-config-serviceaccount
