@@ -25,6 +25,8 @@ func main() {
 		panic(err.Error())
 	}
 
+	fmt.Println("config.Host", config.Host)
+
 	client, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		fmt.Println("could not create discovery client", err)
