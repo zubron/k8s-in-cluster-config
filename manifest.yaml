@@ -41,7 +41,7 @@ metadata:
   namespace: test-in-cluster-config
 spec:
   containers:
-    - image: zubron/k8s-in-cluster-config:v0.0.2
+    - image: zubron/k8s-in-cluster-config:v0.0.3
       imagePullPolicy: IfNotPresent
       name: list-pods
       env:

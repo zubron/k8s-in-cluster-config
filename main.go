@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/restmapper"
@@ -47,9 +48,9 @@ func main() {
 
 	fmt.Printf("found %v API group resources\n", len(groupResources))
 
-
 	ns := os.Getenv("POD_NAMESPACE")
-	pods, err := client.CoreV1().Pods(ns).List(metav1.ListOptions{})
+	ctx := context.TODO()
+	pods, err := client.CoreV1().Pods(ns).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
